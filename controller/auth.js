@@ -29,8 +29,26 @@ exports.findMe = async (req, res) => {
         success: true,
         data: me
     })
-
 }
+
+exports.findUs = async (req, res) => {
+    const users = await User.find();
+    if (users.length <= 0) {
+        res.status(404).json({
+            success: false,
+            data: {},
+            count: users.length
+        })
+    }
+    res.status(201).json({
+        success: true,
+        data: users,
+        count: users.length
+    });
+}
+
+
+
 
 
 
