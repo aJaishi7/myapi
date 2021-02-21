@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     fullName: {
         type: String,
-        required: true
+        required: [true, "Enter Fullname"]
     },
     username: {
         type: String,
@@ -20,6 +20,10 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, "Enter Phone Number"],
         unique: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now()
     },
     // address: {
     //     type: String,
@@ -52,10 +56,6 @@ const UserSchema = new mongoose.Schema({
     //     type: Date,
     //     required: false
     // },
-    // createdAt: {
-    //     type: Date,
-    //     default: Date.now()
-    // },
     // specialistAt: {
     //     type: String,
     //     required: false
@@ -66,4 +66,5 @@ const UserSchema = new mongoose.Schema({
     // }
 });
 
-module.exports = mongoose.model("User",User);
+module.exports = mongoose.model("User", UserSchema);
+
