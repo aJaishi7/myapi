@@ -9,6 +9,18 @@ dotenv.config({
 
 });
 
+const authRoute = require('./routes/auth');
+app.use('/api/user',authRoute);
+
+
+
+
+
+
+
+
+
+
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST;
 app.listen(PORT,
