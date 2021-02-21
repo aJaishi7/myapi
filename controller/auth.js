@@ -47,6 +47,23 @@ exports.findUs = async (req, res) => {
     });
 }
 
+exports.removeMe = async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+        res.status(404).json({
+            success: false,
+            data: {}
+        });
+    }
+    await user.remove();
+    res.status(200).json({
+        success: true,
+        count: user.length,
+        data: {}
+    });
+}
+
+
 
 
 
