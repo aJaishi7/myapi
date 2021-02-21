@@ -63,6 +63,24 @@ exports.removeMe = async (req, res) => {
     });
 }
 
+exports.updateMe = async (req, res) => {
+    const me = await User.findById(req.params.id);
+    const {fullName, username, email, password} = req.body;
+    if (!me) {
+        res.status(404).json({
+            success: false,
+            data: {}
+        });
+    }
+    await User.findByIdAndUpdate(req.params.id, req.body);
+    res.status(200).json({
+        success: true
+    });
+}
+
+
+
+
 
 
 
