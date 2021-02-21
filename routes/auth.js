@@ -5,6 +5,7 @@ const {register, findMe, findUs, removeMe, updateMe} = require('../controller/au
 router.post('/register', register);
 router.get('/findMe/:id', findMe);
 router.get('/findUs', findUs);
+router.delete('/removeMe/:id', removeMe);
 
 
 
