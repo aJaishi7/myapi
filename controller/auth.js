@@ -17,3 +17,21 @@ exports.register = async (req, res) => {
     });
 }
 
+exports.findMe = async (req, res) => {
+    const me = await User.findById(req.params.id);
+    if (!me) {
+        res.status(404).json({
+            success: false,
+            data: {}
+        });
+    }
+    res.status(200).json({
+        success: true,
+        data: me
+    })
+
+}
+
+
+
+
