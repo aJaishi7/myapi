@@ -6,7 +6,6 @@ router.post('/register', register);
 router.get('/findMe/:id', findMe);
 router.get('/findUs', findUs);
 router.delete('/removeMe/:id', removeMe);
-
-
+router.put('/updateMe/:id', updateMe);
 
 module.exports = router;
