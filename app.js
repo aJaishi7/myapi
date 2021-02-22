@@ -19,17 +19,17 @@ const app = express();
 
 //BodyParser, to receive data from postman and forms
 app.use(express.json());
-app.use(express.urlencoded({extended:true}));
+app.use(express.urlencoded({extended: true}));
 
 //Mount User Route
-app.use('/api/user',authRoute);
-
-
+app.use('/api/user', authRoute);
 
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST;
-app.listen(PORT,
-    () =>
-        console
-            .log(`\n*****Server Started*****\n   Host : ${HOST}\n   Mode:${process.env.NODE_ENV}\n   PORT: ${PORT}`.yellow.bold)
+app.listen(
+    PORT,
+    () => console.log(`\n*****Server Started*****   
+    Host : ${HOST}   
+    Mode:${process.env.NODE_ENV} 
+    PORT: ${PORT}`.yellow.bold)
 );

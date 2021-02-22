@@ -1,9 +1,13 @@
 const ErrorHandler = require('../utilities/ErrorHandler');
 const User = require('../entity/auth');
+const bcrypt = require('bcryptjs');
+
 
 exports.register = async (req, res) => {
-    const {fullName, username, email, password} = req.body;
-    const user = await User.create(req.body);
+    const {fullName, username, phone, password} = req.body;
+    // const salt = bcrypt.genSaltSync(10);
+    // req.body.password = bcrypt.hashSync(req.body.password, salt);
+    const user = await User.create({fullName, username, phone, password});
 
     if (!user) {
         res.status(404).json({
