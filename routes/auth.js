@@ -9,6 +9,6 @@ router.get('/findUs', findUs);
 router.delete('/removeMe/:id', removeMe);
 router.put('/updateMe', auth.userAuthentication,updateMe);
 router.post('/letMeLogin', letMeLogin);
-router.get('/logout', logout);
+router.get('/logout',auth.userAuthentication,logout);
 
 module.exports = router;

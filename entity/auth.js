@@ -25,46 +25,46 @@ const UserSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now()
+    },
+    address: {
+        type: String,
+        required: false,
+        default: 'Kathmandu Nepal'
+    },
+    email: {
+        type: String,
+        required: false,
+        default: 'someone@example.com',
+        unique: true
+    },
+    gender: {
+        type: String,
+        enum: ["Male", "Female", "Others"],
+        default: "Male",
+        required: false
+    },
+    photo: {
+        type: String,
+        required: false
+    },
+    usertype: {
+        type: String,
+        enum: ['User', 'Doctor'],
+        default: "User",
+        required: true
+    },
+    dateOfBirth: {
+        type: Date,
+        required: false
+    },
+    specialistAt: {
+        type: String,
+        required: false
+    },
+    experience: {
+        type: String,
+        required: false
     }
-    // address: {
-    //     type: String,
-    //     required: false,
-    //     default: 'Kathmandu Nepal'
-    // },
-    // email: {
-    //     type: String,
-    //     required: false,
-    //     default: 'someone@example.com',
-    //     unique: true
-    // },
-    // gender: {
-    //     type: String,
-    //     enum: ["Male", "Female", "Others"],
-    //     default: "Male",
-    //     required: false
-    // },
-    // photo: {
-    //     type: String,
-    //     required: false
-    // },
-    // usertype: {
-    //     type: String,
-    //     enum: ['User', 'Doctor'],
-    //     default: "User",
-    //     required: true
-    // },
-    // dateOfBirth: {
-    //     type: Date,
-    //     required: false
-    // },
-    // specialistAt: {
-    //     type: String,
-    //     required: false
-    // },
-    // experience: {
-    //     type: String,
-    //     required: false
-    // }
 });
 
 UserSchema.pre("save", async function (next) {
