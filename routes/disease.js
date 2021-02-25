@@ -7,6 +7,7 @@ router.route('/')
     .get('/findDisease', findDisease)
     .get('findDiseaseByName', findDiseaseByName)
     .put('updateDisease', updateDisease)
+    .delete('deleteDisease', deleteDisease)
 
 
 
