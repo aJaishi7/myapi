@@ -49,7 +49,7 @@ exports.findDisease = async (req, res) => {
 }
 
 exports.findDiseaseByName = async (req, res) => {
-    const {diseaseName} = req.body.diseaseName;
+    const {diseaseName} = req.params.diseaseName;
     const disease = await Disease.findOne({diseaseName: diseaseName});
     if (disease.length <= 0) {
         res.status(404).json({
@@ -64,6 +64,24 @@ exports.findDiseaseByName = async (req, res) => {
         data: disease,
         count: disease.length
     });
+}
+
+exports.deleteDisease = async (req, res) => {
+
+    const disease = await Disease.findById(req.params.id);
+    if (!disease) {
+        res.status(404).json({
+            success: false,
+            data: {}
+        });
+    }
+    await disease.remove();
+    res.status(200).json({
+        success: true,
+        count: disease.length,
+        data: {}
+    });
+
 }
 
 
