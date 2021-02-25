@@ -32,3 +32,20 @@ exports.addDisease = async (req, res) => {
     });
 }
 
+exports.findDisease = async (req, res) => {
+    const disease = await Disease.find();
+    if (disease.length <= 0) {
+        res.status(404).json({
+            success: false,
+            data: {},
+            count: users.length
+        })
+    }
+    res.status(201).json({
+        success: true,
+        data: disease,
+        count: disease.length
+    });
+
+}
+
