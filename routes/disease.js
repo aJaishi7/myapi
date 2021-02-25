@@ -5,6 +5,8 @@ const {addDisease, findDisease, updateDisease, deleteDisease, findDiseaseByName}
 router.route('/')
     .post('/addDisease', addDisease)
     .get('/findDisease', findDisease)
+    .get('findDiseaseByName', findDiseaseByName)
+
 
 
 
