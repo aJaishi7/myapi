@@ -1,6 +1,7 @@
 const Disease = require('../entity/disease');
 const Error = require('../utilities/ErrorHandler');
 
+//Add disease
 exports.addDisease = async (req, res) => {
     const {
         diseaseName,
@@ -14,10 +15,12 @@ exports.addDisease = async (req, res) => {
         user
     } = req.body;
 
+    //Search for duplicate data in database
     await Disease.findOne({diseaseName: diseaseName}).then((data) => {
         if (data) {
             res.status(401).json({success: false, message: "Disease Already Saved"});
         }
+        //Add disease to database
         const disease = Disease.create(req.body);
         if (!disease) {
             res.status(401).json({
@@ -32,6 +35,7 @@ exports.addDisease = async (req, res) => {
     });
 }
 
+//Fetch disease from database
 exports.findDisease = async (req, res) => {
     const disease = await Disease.find();
     if (disease.length <= 0) {
@@ -48,6 +52,7 @@ exports.findDisease = async (req, res) => {
     });
 }
 
+//Search disease from database : filtering by name
 exports.findDiseaseByName = async (req, res) => {
     const {diseaseName} = req.params.diseaseName;
     const disease = await Disease.findOne({diseaseName: diseaseName});
@@ -66,9 +71,10 @@ exports.findDiseaseByName = async (req, res) => {
     });
 }
 
+//Remove disease from database
 exports.deleteDisease = async (req, res) => {
 
-    const disease = await Disease.findById(req.params.id);
+    const disease = await Disease.findById({_id: req.params.id});
     if (!disease) {
         res.status(404).json({
             success: false,
@@ -80,6 +86,22 @@ exports.deleteDisease = async (req, res) => {
         success: true,
         count: disease.length,
         data: {}
+    });
+}
+
+//Update disease data
+exports.updateDisease = async (req, res) => {
+    const disease = await Disease.findById({_id: req.params.id});
+    if (!disease) {
+        res.status(404).json({
+            success: false,
+            data: {}
+        });
+    }
+
+    await Disease.findByIdAndUpdate(disease, req.body);
+    res.status(200).json({
+        success: true
     });
 
 }
