@@ -10,7 +10,4 @@ router.route('/')
     .delete('deleteDisease', deleteDisease)
 
 
-
-
-
 module.exports = router;

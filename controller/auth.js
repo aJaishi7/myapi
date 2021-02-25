@@ -13,11 +13,11 @@ exports.register = async (req, res) => {
 
     User.findOne({username: username},).then(async (data) => {
         if (data) {
-            res.status(401).json({message: "taken", success: false});
+            res.status(401).json({message: "User with such username already exists", success: false});
         }
         const user = await User.create(req.body);
         if (!user) {
-            res.status(404).json({
+            res.status(401).json({
                 success: false,
                 data: {}
             });
