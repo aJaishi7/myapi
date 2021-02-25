@@ -25,7 +25,7 @@ const UserSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now()
-    },
+    }
     // address: {
     //     type: String,
     //     required: false,
@@ -67,10 +67,10 @@ const UserSchema = new mongoose.Schema({
     // }
 });
 
-UserSchema.pre("save", function (next) {
+UserSchema.pre("save", async function (next) {
     let user = this;
 
-    bcrypt.hash(user.password, 10).then(hash => {
+    await bcrypt.hash(user.password, 10).then(hash => {
         user.password = hash;
         next();
     })
@@ -81,10 +81,10 @@ UserSchema.pre("save", function (next) {
 });
 
 
-UserSchema.methods.matchPassword = function (password) {
-    let user = this;
-    return bcrypt.compare(password, user.password);
-}
+// UserSchema.methods.matchPassword = async function (password) {
+//     let user = this;
+//     return await bcrypt.compare(password, user.password);
+// }
 
 module.exports = mongoose.model("User", UserSchema);
 

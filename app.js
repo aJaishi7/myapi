@@ -4,25 +4,31 @@ const dotenv = require('dotenv');
 const path = require('path');
 const Connect = require('./config/db');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
 //Implement app.env
 dotenv.config({
     path: "./config/app.env",
 });
+
+
 //Connect to Database
 Connect();
 
 //Load Routes
 const authRoute = require('./routes/auth');
 
+//BodyParser and Cookie parser
 const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(cookieParser());
 
-//BodyParser, to receive data from postman and forms
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+
 
 //Mount User Route
-app.use('/api/user', authRoute);
+app.use('/api/', authRoute);
+
 
 const PORT = process.env.PORT || 5000;
 const HOST = process.env.HOST;
