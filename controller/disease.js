@@ -46,6 +46,24 @@ exports.findDisease = async (req, res) => {
         data: disease,
         count: disease.length
     });
-
 }
+
+exports.findDiseaseByName = async (req, res) => {
+    const {diseaseName} = req.body.diseaseName;
+    const disease = await Disease.findOne({diseaseName: diseaseName});
+    if (disease.length <= 0) {
+        res.status(404).json({
+            success: false,
+            message: 'No Disease Found',
+            data: {},
+            count: users.length
+        });
+    }
+    res.status(201).json({
+        success: true,
+        data: disease,
+        count: disease.length
+    });
+}
+
 
