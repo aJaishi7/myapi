@@ -22,6 +22,10 @@ const DiseaseSchema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    symptoms: {
+        type: String,
+        required: false
+    },
     preventiveMeasures: {
         type: String,
         required: true
@@ -34,10 +38,12 @@ const DiseaseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: false,
-        ref: 'User'
+    diseaseImage: {
+        type: String
+    },
+    createdAt: {
+        type: String,
+        default: Date.now()
     }
 });
 

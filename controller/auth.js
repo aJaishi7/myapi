@@ -11,7 +11,7 @@ exports.register = async (req, res) => {
     // const salt = bcrypt.genSaltSync(10);
     // req.body.password = bcrypt.hashSync(req.body.password, salt);
 
-    User.findOne({username: username},).then(async (data) => {
+    User.findOne({username: username}).then(async (data) => {
         if (data) {
             res.status(401).json({message: "User with such username already exists", success: false});
         }
@@ -46,20 +46,30 @@ exports.findMe = async (req, res) => {
 }
 
 exports.findUs = async (req, res) => {
-    const users = await User.find();
-    if (users.length <= 0) {
-        res.status(404).json({
-            success: false,
-            data: {},
+    await User.find().then((users) => {
+
+        if (users.length <= 0) {
+            res.status(404).json({
+                success: false,
+                data: {},
+                count: users.length
+            })
+        }
+        res.status(201).json({
+            success: true,
+            data: users,
             count: users.length
-        })
-    }
-    res.status(201).json({
-        success: true,
-        data: users,
-        count: users.length
-    });
+        });
+
+    })
 }
+
+exports.findDoctor = async (req, res) => {
+    await User.find({usertype: 'Doctor'}).then((doctors) => {
+        res.status(200).json({success: false, data: doctors, count: doctors.length});
+    })
+}
+
 
 exports.removeMe = async (req, res) => {
     const user = await User.findById(req.params.id);
@@ -78,7 +88,7 @@ exports.removeMe = async (req, res) => {
 }
 
 exports.updateMe = async (req, res) => {
-    const me = await User.findById({_id: req.user._id});
+    const me = await User.findById({_id: req.params.id});
     const {fullName, username, email, password} = req.body;
     if (!me) {
         res.status(404).json({
@@ -92,30 +102,38 @@ exports.updateMe = async (req, res) => {
     });
 }
 
+
+
 exports.letMeLogin = async (req, res) => {
     const {username, password} = req.body;
     await User.findOne({username: username}).then((user) => {
         if (user === null) {
-            res.status(201).json({success: false, data: {}, message: "Invalid Username! Please Enter Valid Username"});
+            return res.status(201).json({
+                success: false,
+                data: user,
+                message: "Invalid Username! Please Enter Valid Username"
+            });
         }
         bcrypt.compare(password, user.password, (err, ok) => {
             if (ok === false) {
                 res.status(201).json({
                     success: false,
-                    data: {},
+                    data: user,
                     message: "Invalid Username! Please Enter Valid Username"
                 });
-            }
-            //Generate WebToken
-            try {
-                const token = jwt.sign({tokenId: user._id}, "pk");
-                res.status(200).json({success: true, data: user, message: "Welcome", token: token});
-            } catch (ex) {
-                new ErrorHandler("Error Generating Token" + ex.message);
+            } else {
+                //Generate WebToken
+                try {
+                    const token = jwt.sign({tokenId: user._id}, "pk");
+                    return res.status(200).json({success: true, data: user, token: token});
+                } catch (ex) {
+                    new ErrorHandler("Error Generating Token" + ex.message);
+                }
             }
         });
     });
 }
+
 
 exports.logout = async (req, res) => {
     res.cookie('token', 'none', {
@@ -125,6 +143,8 @@ exports.logout = async (req, res) => {
 
     res.status(200).json({success: true, message: 'User Logged Out'});
 }
+
+
 
 
 

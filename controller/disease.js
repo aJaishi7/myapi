@@ -37,55 +37,57 @@ exports.addDisease = async (req, res) => {
 
 //Fetch disease from database
 exports.findDisease = async (req, res) => {
-    const disease = await Disease.find();
-    if (disease.length <= 0) {
-        res.status(404).json({
-            success: false,
-            data: {},
-            count: users.length
-        })
-    }
-    res.status(201).json({
-        success: true,
-        data: disease,
-        count: disease.length
-    });
+    await Disease.find().then((disease) => {
+        if (disease.length <= 0) {
+            res.status(404).json({
+                success: false,
+                data: disease,
+                count: disease.length
+            })
+        }
+        res.status(201).json({
+            success: true,
+            data: disease,
+            count: disease.length
+        });
+    })
+
 }
 
 //Search disease from database : filtering by name
 exports.findDiseaseByName = async (req, res) => {
-    const {diseaseName} = req.params.diseaseName;
-    const disease = await Disease.findOne({diseaseName: diseaseName});
-    if (disease.length <= 0) {
-        res.status(404).json({
-            success: false,
-            message: 'No Disease Found',
-            data: {},
-            count: users.length
+
+    const diseaseName = req.params.diseaseName;
+    await Disease.find({diseaseName: diseaseName}).then((disease) => {
+        if (disease === null) {
+            res.status(404).json({
+                success: false,
+                data: disease
+            });
+        }
+        res.status(201).json({
+            success: true,
+            data: disease
         });
-    }
-    res.status(201).json({
-        success: true,
-        data: disease,
-        count: disease.length
-    });
+    })
+
 }
 
 //Remove disease from database
 exports.deleteDisease = async (req, res) => {
 
     const disease = await Disease.findById({_id: req.params.id});
-    if (!disease) {
+    if (disease === null) {
         res.status(404).json({
             success: false,
-            data: {}
+            data: disease
         });
     }
     await disease.remove();
     res.status(200).json({
         success: true,
         count: disease.length,
-        data: {}
+        data: disease
     });
 }
 
@@ -95,7 +97,7 @@ exports.updateDisease = async (req, res) => {
     if (!disease) {
         res.status(404).json({
             success: false,
-            data: {}
+            data: disease
         });
     }
 
@@ -103,7 +105,7 @@ exports.updateDisease = async (req, res) => {
     res.status(200).json({
         success: true
     });
-
 }
+
 
 

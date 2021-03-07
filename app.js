@@ -17,6 +17,7 @@ Connect();
 
 //Load Routes
 const authRoute = require('./routes/auth');
+const diseaseRoute = require('./routes/disease');
 
 //BodyParser and Cookie parser
 const app = express();
@@ -28,6 +29,7 @@ app.use(cookieParser());
 
 //Mount User Route
 app.use('/api/', authRoute);
+app.use('/api/',diseaseRoute);
 
 
 const PORT = process.env.PORT || 5000;

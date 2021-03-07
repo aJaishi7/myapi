@@ -33,9 +33,7 @@ const UserSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: false,
-        default: 'someone@example.com',
-        unique: true
+        default: "someone@example.com"
     },
     gender: {
         type: String,
@@ -51,7 +49,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ['User', 'Doctor'],
         default: "User",
-        required: true
+        required: false //Must be true
     },
     dateOfBirth: {
         type: Date,
@@ -85,6 +83,7 @@ UserSchema.pre("save", async function (next) {
 //     let user = this;
 //     return await bcrypt.compare(password, user.password);
 // }
+
 
 module.exports = mongoose.model("User", UserSchema);
 
