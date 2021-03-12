@@ -2,6 +2,7 @@ const ErrorHandler = require('../utilities/ErrorHandler');
 const User = require('../entity/auth');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const passwordController = require('../middleware/changePassword');
 
 
 exports.register = async (req, res) => {
@@ -89,7 +90,6 @@ exports.removeMe = async (req, res) => {
 
 exports.updateMe = async (req, res) => {
     const me = await User.findById({_id: req.params.id});
-    const {fullName, username, email, password} = req.body;
     if (!me) {
         res.status(404).json({
             success: false,
@@ -102,6 +102,42 @@ exports.updateMe = async (req, res) => {
     });
 }
 
+
+exports.changePassword = async (req, res) => {
+    const {password, newPassword} = req.body;
+    const id = req.params.id;
+
+    await User.findOne({_id: id}).then((user) => {
+        if (user) {
+            if (!password || !newPassword) {
+                res.status(400).json({message: 'Invalid Request !', success: false});
+            } else {
+                bcrypt.compare(password, user.password, (err, ok) => {
+                    if (!ok) {
+                        res.status(401).json({success: false});
+                        console.log("zzzzzzzzzzzz");
+                    } else {
+                        bcrypt.hash(newPassword, 10).then((hash) => {
+                            user.newPassword = hash;
+                            User.updateOne({_id: id}, {password: user.newPassword}).then((success) => {
+                                if (success) {
+                                    res.status(200).json({success: true});
+                                    console.log("fdsfdsfsd");
+                                } else {
+                                    res.status(401).json({success: false});
+                                    console.log("err")
+                                }
+                            })
+                        })
+                    }
+                })
+            }
+        } else {
+            res.status(404).json({message: "No User Found", success: false});
+        }
+
+    })
+}
 
 
 exports.letMeLogin = async (req, res) => {
@@ -118,8 +154,7 @@ exports.letMeLogin = async (req, res) => {
             if (ok === false) {
                 res.status(201).json({
                     success: false,
-                    data: user,
-                    message: "Invalid Username! Please Enter Valid Username"
+                    message: "Invalid Password! Please Enter Valid Password"
                 });
             } else {
                 //Generate WebToken

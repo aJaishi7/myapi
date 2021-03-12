@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
         required: [true, "Enter Password"],
         minlength: 5
     },
+    newPassword: {
+        type: String,
+        minlength: 5
+    },
     phone: {
         type: String,
         required: [true, "Enter Phone Number"],
